@@ -20,9 +20,9 @@ r:
   - oldrel
   - release
   - devel
-
+  
 after_success:
-  - Rscript -e 'library(covr);codecov(quiet = FALSE)'
+  - Rscript -e 'covr::codecov(quiet = FALSE)'
   
 warnings_are_errors: false
 
