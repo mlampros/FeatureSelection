@@ -1,6 +1,4 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-[![Travis-CI Build Status](https://travis-ci.org/mlampros/FeatureSelection.svg?branch=master)](https://travis-ci.org/mlampros/FeatureSelection)
-[![codecov.io](https://codecov.io/github/mlampros/FeatureSelection/coverage.svg?branch=master)](https://codecov.io/github/mlampros/FeatureSelection?branch=master)
 
 language: r
 sudo: required
