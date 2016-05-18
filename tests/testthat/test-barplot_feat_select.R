@@ -12,9 +12,9 @@ testthat::test_that("it returns an error if the object is NULL", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = NULL)
 
   params_barplot = list(keep_features = NULL, horiz = TRUE, cex.names = 0.8)
 
@@ -50,9 +50,9 @@ testthat::test_that("glmnet for the feature_selection object, returns 3 column d
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = NULL)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
@@ -70,9 +70,9 @@ testthat::test_that("it returns plot in case of binomial", {
   y = as.factor(y)
   X = X[, -5]
 
-  params_glmnet = list(alpha = 1, family = 'binomial', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'binomial', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5, scale_coefs_glmnet = T, verbose = F)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = NULL, scale_coefs_glmnet = T, verbose = F)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
@@ -86,9 +86,9 @@ testthat::test_that("glmnet for the feature_selection object, returns 2 column d
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 1, cores_glmnet = 5)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 1, cores_glmnet = NULL)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
@@ -173,7 +173,7 @@ testthat::test_that("plot of all methods when union = T", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -184,7 +184,7 @@ testthat::test_that("plot of all methods when union = T", {
 
   res = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = "Gain",
 
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
 
@@ -198,7 +198,7 @@ testthat::test_that("plot of all methods when union = T", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -209,7 +209,7 @@ testthat::test_that("plot of all methods when union = T", {
 
   res = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = "Gain",
 
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
 
@@ -223,7 +223,7 @@ testthat::test_that("plot of all methods when union = T", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -234,7 +234,7 @@ testthat::test_that("plot of all methods when union = T", {
 
   res = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
 
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
 
@@ -247,7 +247,7 @@ testthat::test_that("plot of all methods when union = F", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -258,7 +258,7 @@ testthat::test_that("plot of all methods when union = F", {
 
   res = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = "Gain",
 
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
 
@@ -316,14 +316,14 @@ testthat::test_that("plot one of the methods when union = F [ glmnet - lasso ]",
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
 
   params_features = list(keep_number_feat = NULL, union = F)
 
   res = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = NULL, params_ranger = NULL, xgb_sort = "Gain",
 
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
 
