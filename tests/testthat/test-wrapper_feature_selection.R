@@ -202,6 +202,7 @@ testthat::test_that("wrapper_feat_select returns an error if the dependent.varia
 
   X = iris
   X$Species = as.numeric(X$Species)
+  y = X$Species
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
 
