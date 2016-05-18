@@ -179,6 +179,7 @@ testthat::test_that("wrapper_feat_select works if the dependent.variable.name is
 
   X = iris
   X$Species = as.numeric(X$Species)
+  y = X$Species
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
