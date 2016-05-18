@@ -9,7 +9,7 @@ testthat::test_that("it returns an error if all methods are NULL", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 100, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -19,7 +19,7 @@ testthat::test_that("it returns an error if all methods are NULL", {
   params_features = list(keep_number_feat = NULL, union = TRUE)
 
   testthat::expect_error(wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = NULL, params_ranger = NULL, xgb_sort = NULL,
-                                             CV_folds = 1, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features))
+                                             CV_folds = 1, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features))
 })
 
 
