@@ -23,6 +23,8 @@ r:
 
 after_success:
   - Rscript -e 'covr::coveralls(quiet = FALSE)'
+  
+warnings_are_errors: false
 
 notifications:
   email:
