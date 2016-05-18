@@ -129,6 +129,7 @@ testthat::test_that("it returns a list with non-empty data frames when union = F
   testthat::expect_true(is.list(res) & all(unlist(lapply(res, function(x) sum(dim(x)))) > 0))
 })
 
+
 testthat::test_that("it returns a list of two when union = T. The data frames in the first list and in the second list should be non-empty", {
 
   X = iris[, -5]
@@ -272,6 +273,7 @@ testthat::test_that("it works in BINOMIAL classification. The labels should be i
 
   testthat::expect_true(is.list(res) & all(unlist(lapply(res$all_feat, function(x) sum(dim(x)))) > 0) & sum(dim(res$union_feat)) > 0)
 })
+
 
 testthat::test_that("it works in MULTICLASS classification. The labels should be in c(0 to Inf), so that xgboost works. It should return a
 
