@@ -1,10 +1,12 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+[![Travis-CI Build Status](https://travis-ci.org/mlampros/FeatureSelection.svg?branch=master)](https://travis-ci.org/mlampros/FeatureSelection)
+[![codecov.io](https://codecov.io/github/mlampros/FeatureSelection/coverage.svg?branch=master)](https://codecov.io/github/mlampros/FeatureSelection?branch=master)
 
 language: r
 sudo: required
 cache: packages
 
-before_install:
+before_install:                                                         # copy-pasted from the ranger .travis.yml, as is the only package which requires c++11
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get -qq update
   - sudo apt-get -qq install gcc-4.8
