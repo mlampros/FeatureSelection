@@ -1,0 +1,22 @@
+Package: FeatureSelection
+Type: Package
+Title: feature selection
+Version: 0.1
+Imports:
+    doMC,
+    dplyr,
+    glmnet,
+    ranger,
+    xgboost,
+    Matrix
+Date: 2016-01-02
+Author: Lampros Mouselimis
+Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
+Description: the main function feature_selection performs feature selection
+    using one of the glmnet, xgboost or ranger.
+License: GPL-3
+LazyData: TRUE
+Suggests:
+    testthat,
+    covr
+RoxygenNote: 5.0.1
