@@ -180,7 +180,7 @@ testthat::test_that("wrapper_feat_select works if the dependent.variable.name is
   X = iris
   X$Species = as.numeric(X$Species)
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -191,7 +191,7 @@ testthat::test_that("wrapper_feat_select works if the dependent.variable.name is
 
   res = wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = NULL, params_ranger = params_ranger, xgb_sort = NULL,
 
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
 
   testthat::expect_true(is.list(res) & sum(dim(res$ranger)) > 0)
 })
