@@ -12,9 +12,9 @@ testthat::test_that("it returns an error if the object is NULL", {
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = NULL)
 
   params_barplot = list(keep_features = NULL, horiz = TRUE, cex.names = 0.8)
 
@@ -50,9 +50,9 @@ testthat::test_that("glmnet for the feature_selection object, returns 3 column d
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = NULL)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
@@ -70,9 +70,9 @@ testthat::test_that("it returns plot in case of binomial", {
   y = as.factor(y)
   X = X[, -5]
 
-  params_glmnet = list(alpha = 1, family = 'binomial', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'binomial', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5, scale_coefs_glmnet = T, verbose = F)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = NULL, scale_coefs_glmnet = T, verbose = F)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
@@ -86,9 +86,9 @@ testthat::test_that("glmnet for the feature_selection object, returns 2 column d
   y = X[, 1]
   X = X[, -1]
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
-  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 1, cores_glmnet = 5)
+  res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 1, cores_glmnet = NULL)
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
