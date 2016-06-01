@@ -29,18 +29,12 @@ func_shuffle = function(vec, times = 10) {
 
 add_probs_dfs = function(PREDS_LST) {
 
-  if (!is.list(PREDS_LST)) {
-
-    stop(simpleError("PREDS_LST must be a list"))
-  }
+  if (class(PREDS_LST) != "list") stop("PREDS_LST must be a list")
 
   r = all(unlist(lapply(PREDS_LST, nrow)) == unlist(lapply(PREDS_LST, nrow))[1])
   c = all(unlist(lapply(PREDS_LST, ncol)) == unlist(lapply(PREDS_LST, ncol))[1])
 
-  if (!any(c(r,c))) {
-
-    stop("the dimensions of the included data.frames or matrices differ")
-  }
+  if (!all(c(r,c))) stop("the dimensions of the included data.frames or matrices differ")
 
   init_df = data.frame(matrix(rep(0, dim(PREDS_LST[[1]])[1]*dim(PREDS_LST[[1]])[2]), nrow = dim(PREDS_LST[[1]])[1], ncol = dim(PREDS_LST[[1]])[2]))
 
