@@ -3,7 +3,6 @@
 #' this is a secondary function that is used in the func_correlation
 #'
 #' @keywords internal
-#' @export
 #' @importFrom stats na.omit
 
 # use this function if more than one predictor output
@@ -29,7 +28,6 @@ second_func_cor = function(dat_frame) {
 #' this is a secondary function that is used in the func_correlation
 #'
 #' @keywords internal
-#' @export
 
 
 remove_duplic_func = function(sublist) {
