@@ -21,7 +21,7 @@ devtools::install_github('mlampros/FeatureSelection')
 UPDATED : 18-05-2016 [ I added tests and code-coverage ]
 <br>
 
-UPDATE : 13-06-2017 [ The package uses an xgboost version of 0.4-4 ]
+UPDATE : 13-06-2017 [ The package uses an older xgboost version (= 0.4-4) ]
 
 ```R
 
