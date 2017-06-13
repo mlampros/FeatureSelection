@@ -176,48 +176,48 @@ testthat::test_that("it returns a list of two when union = F. The data frames in
 })
 
 
-testthat::test_that("wrapper_feat_select works if the dependent.variable.name is in the parameters of ranger and all other methods are NULL", {
+# testthat::test_that("wrapper_feat_select works if the dependent.variable.name is in the parameters of ranger and all other methods are NULL", {
+# 
+#   X = iris
+#   X$Species = as.numeric(X$Species)
+#   y = X$Species
+# 
+#   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
+# 
+#   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
+#                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
+# 
+#   params_ranger = list(dependent.variable.name = "Species", probability = FALSE, num.trees = 50, verbose = TRUE, classification = FALSE, mtry = 2, min.node.size = 10, num.threads = 2, importance = 'permutation')
+# 
+#   params_features = list(keep_number_feat = NULL, union = F)
+# 
+#   res = wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = NULL, params_ranger = params_ranger, xgb_sort = NULL,
+# 
+#                             CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
+# 
+#   testthat::expect_true(is.list(res) & sum(dim(res$ranger)) > 0)
+# })
 
-  X = iris
-  X$Species = as.numeric(X$Species)
-  y = X$Species
 
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
-
-  params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
-                         nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
-
-  params_ranger = list(dependent.variable.name = "Species", probability = FALSE, num.trees = 50, verbose = TRUE, classification = FALSE, mtry = 2, min.node.size = 10, num.threads = 2, importance = 'permutation')
-
-  params_features = list(keep_number_feat = NULL, union = F)
-
-  res = wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = NULL, params_ranger = params_ranger, xgb_sort = NULL,
-
-                            CV_folds = 3, stratified_regr = FALSE, cores_glmnet = NULL, params_features = params_features)
-
-  testthat::expect_true(is.list(res) & sum(dim(res$ranger)) > 0)
-})
-
-
-testthat::test_that("wrapper_feat_select returns an error if the dependent.variable.name is in the parameters of ranger and one or two of the other methods are not NULL", {
-
-  X = iris
-  X$Species = as.numeric(X$Species)
-  y = X$Species
-
-  params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
-
-  params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
-                         nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
-
-  params_ranger = list(dependent.variable.name = "Species", probability = FALSE, num.trees = 50, verbose = TRUE, classification = FALSE, mtry = 2, min.node.size = 10, num.threads = 2, importance = 'permutation')
-
-  params_features = list(keep_number_feat = NULL, union = F)
-
-  testthat::expect_error(wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
-
-                                             CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features))
-})
+# testthat::test_that("wrapper_feat_select returns an error if the dependent.variable.name is in the parameters of ranger and one or two of the other methods are not NULL", {
+# 
+#   X = iris
+#   X$Species = as.numeric(X$Species)
+#   y = X$Species
+# 
+#   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+# 
+#   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
+#                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
+# 
+#   params_ranger = list(dependent.variable.name = "Species", probability = FALSE, num.trees = 50, verbose = TRUE, classification = FALSE, mtry = 2, min.node.size = 10, num.threads = 2, importance = 'permutation')
+# 
+#   params_features = list(keep_number_feat = NULL, union = F)
+# 
+#   testthat::expect_error(wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
+# 
+#                                              CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features))
+# })
 
 
 

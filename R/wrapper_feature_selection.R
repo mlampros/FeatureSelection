@@ -56,7 +56,7 @@ wrapper_feat_select = function(X, y, params_glmnet = NULL, params_xgboost = NULL
 
   method = method[met1]
 
-  if (!is.null(params_ranger) && ("dependent.variable.name" %in% names(params_ranger)) && sum(met1) > 1) stop("ranger can not be used simoultaneously with the other methods if 'dependent.variable.name' is in the params_ranger")
+  #if (!is.null(params_ranger) && ("dependent.variable.name" %in% names(params_ranger)) && sum(met1) > 1) stop("ranger can not be used simoultaneously with the other methods if 'dependent.variable.name' is in the params_ranger")
 
   if (CV_folds < 2) {
 
