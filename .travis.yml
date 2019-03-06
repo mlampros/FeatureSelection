@@ -16,11 +16,6 @@ before_install:                                                         # copy-p
 install:
   - Rscript -e 'install.packages(c("devtools","roxygen2","testthat", "doMC", "dplyr", "glmnet", "ranger", "covr"))'
   - Rscript -e 'devtools::install_version("xgboost", version = "0.4-4", repos = "http://cran.us.r-project.org")'       # install older version of xgboost
-
-r:
-  - oldrel
-  - release
-  - devel
   
 after_success:
   - Rscript -e 'covr::codecov(quiet = FALSE)'
