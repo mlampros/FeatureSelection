@@ -1,22 +1,33 @@
 Package: FeatureSelection
 Type: Package
-Title: feature selection
-Version: 0.1
+Title: Feature extraction and selection based on 'glmnet', 'xgboost' and 'ranger'
+Version: 1.0.0
+Date: 2020-02-03
+Author: Lampros Mouselimis
+Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
+BugReports: https://github.com/mlampros/FeatureSelection/issues
+URL: https://github.com/mlampros/FeatureSelection
+Description: Feature extraction and selection based on 'glmnet', 'xgboost' and 'ranger' R packages. This package allows also the plotting of selected features and observing the correlation of multiple predictors.
+Depends:
+    R(>= 3.3.0)
 Imports:
     doMC,
     dplyr,
     glmnet,
     ranger,
     xgboost,
-    Matrix
-Date: 2016-01-02
-Author: Lampros Mouselimis
-Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
-Description: the main function feature_selection performs feature selection
-    using one of the glmnet, xgboost or ranger.
-License: GPL-3
-LazyData: TRUE
+    Matrix,
+    magrittr,
+    utils,
+    stats,
+    graphics,
+    grDevices,
+    rlang
 Suggests:
     testthat,
     covr
-RoxygenNote: 5.0.1
+SystemRequirements: update: apt-get -y update (deb)
+License: GPL-3
+LazyData: TRUE
+Encoding: UTF-8
+RoxygenNote: 7.0.2

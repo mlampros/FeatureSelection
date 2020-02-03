@@ -4,10 +4,20 @@
 \alias{feature_selection}
 \title{Feature selection}
 \usage{
-feature_selection(X, y, method = NULL, params_glmnet = NULL,
-  params_xgboost = NULL, params_ranger = NULL, xgb_sort = NULL,
-  CV_folds = 5, stratified_regr = FALSE, scale_coefs_glmnet = FALSE,
-  cores_glmnet = NULL, verbose = FALSE)
+feature_selection(
+  X,
+  y,
+  method = NULL,
+  params_glmnet = NULL,
+  params_xgboost = NULL,
+  params_ranger = NULL,
+  xgb_sort = NULL,
+  CV_folds = 5,
+  stratified_regr = FALSE,
+  scale_coefs_glmnet = FALSE,
+  cores_glmnet = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{X}{a sparse Matrix, a matrix or a data frame}
@@ -22,7 +32,7 @@ feature_selection(X, y, method = NULL, params_glmnet = NULL,
 
 \item{params_ranger}{a list of parameters for the ranger model}
 
-\item{xgb_sort}{sort the xgboost features by "Gain", "Cover" or "Frequence" ( defaults to "Frequence")}
+\item{xgb_sort}{sort the xgboost features by "Gain", "Cover" or "Frequency" ( defaults to "Frequency")}
 
 \item{CV_folds}{a number specifying the number of folds for cross validation}
 
@@ -43,49 +53,87 @@ This function uses three different methods (glmnet, xgboost, ranger) in order to
 \details{
 This function returns the important features using one of the glmnet, xgboost or ranger algorithms. The glmnet algorithm can take either a sparse matrix, a matrix or a data frame
 and returns a data frame with non zero coefficients. The xgboost algorithm can take either a sparse matrix, a matrix or a data frame and returns the importance of the features in form
-of a data frame, furthermore it is possible to sort the features using one of the "Gain", "Cover" or "Frequence" methods. The ranger algorithm can take either a matrix or a data frame
+of a data frame, furthermore it is possible to sort the features using one of the "Gain", "Cover" or "Frequency" methods. The ranger algorithm can take either a matrix or a data frame
 and returns the important features using one of the 'impurity' or 'permutation' methods.
 }
 \examples{
 
-# Data
+\dontrun{
+
+#...........
 # regression
+#...........
 
-# data(iris)
-# X = iris[, -5]
-# y = X[, 1]
-# X = X[, -1]
+data(iris)
 
-# params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
-# res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
+X = iris[, -5]
+y = X[, 1]
+X = X[, -1]
 
+params_glmnet = list(alpha = 1, 
+                     family = 'gaussian', 
+                     nfolds = 3, 
+                     parallel = TRUE)
+                     
+res = feature_selection(X, 
+                        y,
+                        method = 'glmnet-lasso',
+                        params_glmnet = params_glmnet, 
+                        CV_folds = 5,
+                        cores_glmnet = 5)
+
+#......................
 # binary classification
+#......................
 
-# data(iris)
-# y = iris[, 5]
-# y = as.character(y)
-# y[y == 'setosa'] = 'virginica'
-# X = iris[, -5]
+y = iris[, 5]
+y = as.character(y)
+y[y == 'setosa'] = 'virginica'
+X = iris[, -5]
 
-# params_ranger = list(write.forest = TRUE, probability = TRUE, num.threads = 6, num.trees = 50, verbose = FALSE, classification = TRUE, mtry = 2, min.node.size = 5, importance = 'impurity')
+params_ranger = list(write.forest = TRUE, 
+                     probability = TRUE, 
+                     num.threads = 6, 
+                     num.trees = 50, 
+                     verbose = FALSE, 
+                     classification = TRUE,
+                     mtry = 2, 
+                     min.node.size = 5, 
+                     importance = 'impurity')
 
-# res = feature_selection(X, y, method = 'ranger', params_ranger = params_ranger, CV_folds = 5)
+res = feature_selection(X, 
+                        y, 
+                        method = 'ranger', 
+                        params_ranger = params_ranger,
+                         CV_folds = 5)
 
-
+#..........................
 # multiclass classification
+#..........................
 
+y = iris[, 5]
+multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
+X = iris[, -5]
 
-# data(iris)
-# y = iris[, 5]
-# multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
-# X = iris[, -5]
+params_xgboost = list(params = list("objective" = "multi:softprob", 
+                                    "bst:eta" = 0.35, 
+                                    "subsample" = 0.65,
+                                     "num_class" = 3, 
+                                     "max_depth" = 6, 
+                                     "colsample_bytree" = 0.65, 
+                                     "nthread" = 2),
+                        nrounds = 50,
+                         print.every.n = 50, 
+                         verbose = 0, 
+                         maximize = FALSE)
 
-# params_xgboost = list( params = list("objective" = "multi:softprob", "bst:eta" = 0.35, "subsample" = 0.65, "num_class" = 3, "max_depth" = 6, "colsample_bytree" = 0.65, "nthread" = 2),
-#                        nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
-
-# res = feature_selection(X, multiclass_xgboost, method = 'xgboost', params_xgboost = params_xgboost, CV_folds = 5)
+res = feature_selection(X, 
+                        multiclass_xgboost, 
+                        method = 'xgboost', 
+                        params_xgboost = params_xgboost, 
+                        CV_folds = 5)
+}
 }
 \author{
 Lampros Mouselimis
 }
-

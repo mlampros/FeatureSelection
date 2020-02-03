@@ -22,7 +22,7 @@ testthat::test_that("it returns an error if the object is NULL", {
 })
 
 
-testthat::test_that("it returns an error if sort method of xgoobst not one of Frequence, Gain, Cover", {
+testthat::test_that("it returns an error if sort method of xgoobst not one of Frequency, Gain, Cover", {
 
   y = iris[, 5]
   multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
@@ -97,7 +97,7 @@ testthat::test_that("glmnet for the feature_selection object, returns 2 column d
 
 
 
-testthat::test_that("xgboost for the feature_selection object, xgb_sort Frequence", {
+testthat::test_that("xgboost for the feature_selection object, xgb_sort Frequency", {
 
   y = iris[, 5]
   multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
@@ -110,7 +110,7 @@ testthat::test_that("xgboost for the feature_selection object, xgb_sort Frequenc
 
   params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
-  testthat::expect_silent(barplot_feat_select(res, params_barplot, xgb_sort = 'Frequence'))
+  testthat::expect_silent(barplot_feat_select(res, params_barplot, xgb_sort = 'Frequency'))
 })
 
 

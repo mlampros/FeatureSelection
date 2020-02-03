@@ -11,7 +11,7 @@ barplot_feat_select(obj, params_barplot, xgb_sort = NULL)
 
 \item{params_barplot}{a list of parameters needed for plotting the important features}
 
-\item{xgb_sort}{sort the xgboost features by "Gain", "Cover" or "Frequence" ( defaults to "Frequence")}
+\item{xgb_sort}{sort the xgboost features by "Gain", "Cover" or "Frequency" ( defaults to "Frequency")}
 }
 \value{
 a barplot with the important features of each method
@@ -25,30 +25,36 @@ If union is TRUE in the params_barplot vector it returns also the average import
 }
 \examples{
 
-# data(iris)
-# X = iris[, -5]
-# y = X[, 1]
-# X = X[, -1]
+\dontrun{
+
+data(iris)
+
+X = iris[, -5]
+y = X[, 1]
+X = X[, -1]
+
+#.............................
+# plot of the wrapper function
+#.............................
+
+feat = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
+                           CV_folds = 10, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+
+params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
+
+barplot_feat_select(feat, params_barplot, xgb_sort = NULL)
 
 
-# plot for the wrapper function
+#.......................................
+# plot of the feature_selection function
+#.......................................
 
-# feat = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
-#                            CV_folds = 10, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
-
-# params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 1.0)
-
-# barplot_feat_select(feat, params_barplot, xgb_sort = NULL)
+res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
 
 
+params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
 
-# plot for the feature_selection function
+barplot_feat_select(res, params_barplot, xgb_sort = NULL)
 
-# res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 5, cores_glmnet = 5)
-
-
-# params_barplot = list(keep_features = 5, horiz = TRUE, cex.names = 0.8)
-
-# barplot_feat_select(res, params_barplot, xgb_sort = NULL)
 }
-
+}

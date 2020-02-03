@@ -10,4 +10,3 @@ second_func_cor(dat_frame)
 this is a secondary function that is used in the func_correlation
 }
 \keyword{internal}
-

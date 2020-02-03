@@ -15,4 +15,3 @@ average of a number of data frames
 \description{
 this function takes a number of probability data frames and returns their average (mainly used in multi-class classification).
 }
-

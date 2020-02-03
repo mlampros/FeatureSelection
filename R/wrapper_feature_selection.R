@@ -1,4 +1,5 @@
-#' wrapper of all three methods
+
+#' Wraps all three methods
 #'
 #' This function is a wrapper for the feature_selection function
 #'
@@ -7,7 +8,7 @@
 #' @param params_glmnet a list of parameters for the glmnet model
 #' @param params_xgboost a list of parameters for the xgboost model
 #' @param params_ranger a list of parameters for the ranger model
-#' @param xgb_sort sort the xgboost features by "Gain", "Cover" or "Frequence" ( defaults to "Frequence")
+#' @param xgb_sort sort the xgboost features by "Gain", "Cover" or "Frequency" ( defaults to "Frequency")
 #' @param CV_folds a number specifying the number of folds for cross validation
 #' @param stratified_regr a boolean determining if the folds in regression should be stratified
 #' @param scale_coefs_glmnet if TRUE, less important coefficients will be smaller than the more important ones (ranking/plotting by magnitude possible)
@@ -15,33 +16,72 @@
 #' @param params_features is a list of parameters for the wrapper function
 #' @param verbose outputs info
 #' @return a list containing the important features of each method. If union in the params_feature list is enabled, then it also returns the average importance of all methods.
+#' 
 #' @details
 #' This function returns the importance of the methods specified and if union in the params_feature list is TRUE then it also returns the average importance of all methods.
 #' Furthermore the user can limit the number of features using the keep_number_feat parameter of the params_feature list.
+#' 
 #' @export
-#' @importFrom dplyr group_by mutate_each summarize summarize_each funs n %>%
+#' @importFrom dplyr group_by summarize n 
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' 
 #' @examples
 #'
+#' \dontrun{
+#' 
+#' #...........
 #' # regression
+#' #...........
 #'
-#' # data(iris)
-#' # X = iris[, -5]
-#' # y = X[, 1]
-#' # X = X[, -1]
+#' data(iris)
+#' 
+#' X = iris[, -5]
+#' y = X[, 1]
+#' X = X[, -1]
 #'
-#' # params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+#' params_glmnet = list(alpha = 1, 
+#'                      family = 'gaussian', 
+#'                      nfolds = 3, 
+#'                      parallel = TRUE)
 #'
-#' # params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
-#' #                        nrounds = 100, print.every.n = 50, verbose = 0, maximize = FALSE)
 #'
-#' # params_ranger = list(probability = FALSE, num.trees = 100, verbose = TRUE, classification = FALSE, mtry = 3, min.node.size = 10, num.threads = 2, importance = 'permutation')
+#' params_xgboost = list( params = list("objective" = "reg:linear", 
+#'                                      "bst:eta" = 0.01, 
+#'                                      "subsample" = 0.65, 
+#'                                      "max_depth" = 5,
+#'                                      "colsample_bytree" = 0.65,
+#'                                      "nthread" = 2),
+#'                        nrounds = 100, 
+#'                        print.every.n = 50, 
+#'                        verbose = 0, 
+#'                        maximize = FALSE)
 #'
-#' # params_features = list(keep_number_feat = NULL, union = TRUE)
 #'
-#' # feat = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
-#' #                            CV_folds = 10, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
-
-
+#' params_ranger = list(probability = FALSE, 
+#'                      num.trees = 100, 
+#'                      verbose = TRUE, 
+#'                      classification = FALSE,
+#'                      mtry = 3,
+#'                      min.node.size = 10,
+#'                      num.threads = 2, 
+#'                      importance = 'permutation')
+#'
+#'
+#' params_features = list(keep_number_feat = NULL, 
+#'                        union = TRUE)
+#'
+#' feat = wrapper_feat_select(X, 
+#'                            y, 
+#'                            params_glmnet = params_glmnet, 
+#'                            params_xgboost = params_xgboost, 
+#'                            params_ranger = params_ranger,
+#'                             xgb_sort = NULL,
+#'                            CV_folds = 10, 
+#'                            stratified_regr = FALSE, 
+#'                            cores_glmnet = 2, 
+#'                            params_features = params_features)
+#' }
 
 
 wrapper_feat_select = function(X, y, params_glmnet = NULL, params_xgboost = NULL, params_ranger = NULL, xgb_sort = NULL, CV_folds = 5,
@@ -92,12 +132,9 @@ wrapper_feat_select = function(X, y, params_glmnet = NULL, params_xgboost = NULL
     out = lapply(out_meth, function(x) x[1:params_features$keep_number_feat, ])
   }
 
-
   if (params_features$union == TRUE) {
 
     out_union = list()
-
-    suppressMessages(library(dplyr))
 
     for (k in method) {
 
@@ -147,8 +184,8 @@ wrapper_feat_select = function(X, y, params_glmnet = NULL, params_xgboost = NULL
     modify_lst = lapply(out_union, function(x) data.frame(feature = x$features, rank = normalized(length(x$features):1)))
 
     modify_lst1 = data.frame(do.call(rbind, modify_lst))
-
-    tbl_x = data.frame(modify_lst1 %>% group_by(feature) %>% summarize(importance = sum(rank, na.rm = TRUE), Frequency = n()))
+    
+    tbl_x = data.frame(modify_lst1 %>% dplyr::group_by(.data$feature) %>% dplyr::summarize(importance = sum(rank, na.rm = TRUE), Frequency = dplyr::n()))
 
     tbl1 = tbl_x[order(tbl_x$importance, decreasing = TRUE), ]
 
@@ -161,3 +198,4 @@ wrapper_feat_select = function(X, y, params_glmnet = NULL, params_xgboost = NULL
     return(all_feat = out)
   }
 }
+

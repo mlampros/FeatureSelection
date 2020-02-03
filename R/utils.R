@@ -1,3 +1,25 @@
+
+
+#' secondary function to replace NAs
+#'
+#' @keywords internal
+#' 
+#' @importFrom stats median
+
+func_replace_NAs = function(data, which_isna) {
+  
+  for (i in which_isna) {
+    
+    tmp_median = stats::median(data[, i], na.rm = T)
+    
+    data[which(is.na(data[, i])), i] = tmp_median
+  }
+  
+  return(data)
+}
+
+
+
 #' shuffle data
 #'
 #' this function shuffles the items of a vector

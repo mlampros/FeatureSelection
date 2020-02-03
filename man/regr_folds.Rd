@@ -21,9 +21,13 @@ this function creates both stratified and non-stratified folds in regression
 }
 \examples{
 
-# data(iris)
-# y = X[, 1]
+\dontrun{
 
-# folds = regr_folds(5, y, stratified = FALSE)
+data(iris)
+
+y = X[, 1]
+
+folds = regr_folds(5, y, stratified = FALSE)
+
 }
-
+}

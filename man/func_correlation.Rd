@@ -4,8 +4,13 @@
 \alias{func_correlation}
 \title{find correlated variables}
 \usage{
-func_correlation(data, target = NULL, correlation_thresh = NULL,
-  use_obs = NULL, correlation_method = NULL)
+func_correlation(
+  data,
+  target = NULL,
+  correlation_thresh = NULL,
+  use_obs = NULL,
+  correlation_method = NULL
+)
 }
 \arguments{
 \item{data}{either a data frame or a matrix}
@@ -27,4 +32,3 @@ This function takes a data frame or a matrix and returns either a data frame or 
 \details{
 This function takes a data frame or a matrix and returns the correlated variables of the data
 }
-

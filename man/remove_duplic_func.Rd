@@ -10,4 +10,3 @@ remove_duplic_func(sublist)
 this is a secondary function that is used in the func_correlation
 }
 \keyword{internal}
-

@@ -2,12 +2,22 @@
 % Please edit documentation in R/wrapper_feature_selection.R
 \name{wrapper_feat_select}
 \alias{wrapper_feat_select}
-\title{wrapper of all three methods}
+\title{Wraps all three methods}
 \usage{
-wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = NULL,
-  params_ranger = NULL, xgb_sort = NULL, CV_folds = 5,
-  stratified_regr = FALSE, scale_coefs_glmnet = FALSE,
-  cores_glmnet = NULL, params_features = NULL, verbose = FALSE)
+wrapper_feat_select(
+  X,
+  y,
+  params_glmnet = NULL,
+  params_xgboost = NULL,
+  params_ranger = NULL,
+  xgb_sort = NULL,
+  CV_folds = 5,
+  stratified_regr = FALSE,
+  scale_coefs_glmnet = FALSE,
+  cores_glmnet = NULL,
+  params_features = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{X}{a sparse Matrix, a matrix or a data frame}
@@ -20,7 +30,7 @@ wrapper_feat_select(X, y, params_glmnet = NULL, params_xgboost = NULL,
 
 \item{params_ranger}{a list of parameters for the ranger model}
 
-\item{xgb_sort}{sort the xgboost features by "Gain", "Cover" or "Frequence" ( defaults to "Frequence")}
+\item{xgb_sort}{sort the xgboost features by "Gain", "Cover" or "Frequency" ( defaults to "Frequency")}
 
 \item{CV_folds}{a number specifying the number of folds for cross validation}
 
@@ -46,23 +56,58 @@ Furthermore the user can limit the number of features using the keep_number_feat
 }
 \examples{
 
+\dontrun{
+
+#...........
 # regression
+#...........
 
-# data(iris)
-# X = iris[, -5]
-# y = X[, 1]
-# X = X[, -1]
+data(iris)
 
-# params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = TRUE)
+X = iris[, -5]
+y = X[, 1]
+X = X[, -1]
 
-# params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.01, "subsample" = 0.65, "max_depth" = 5, "colsample_bytree" = 0.65, "nthread" = 2),
-#                        nrounds = 100, print.every.n = 50, verbose = 0, maximize = FALSE)
+params_glmnet = list(alpha = 1, 
+                     family = 'gaussian', 
+                     nfolds = 3, 
+                     parallel = TRUE)
 
-# params_ranger = list(probability = FALSE, num.trees = 100, verbose = TRUE, classification = FALSE, mtry = 3, min.node.size = 10, num.threads = 2, importance = 'permutation')
 
-# params_features = list(keep_number_feat = NULL, union = TRUE)
+params_xgboost = list( params = list("objective" = "reg:linear", 
+                                     "bst:eta" = 0.01, 
+                                     "subsample" = 0.65, 
+                                     "max_depth" = 5,
+                                     "colsample_bytree" = 0.65,
+                                     "nthread" = 2),
+                       nrounds = 100, 
+                       print.every.n = 50, 
+                       verbose = 0, 
+                       maximize = FALSE)
 
-# feat = wrapper_feat_select(X, y, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = NULL,
-#                            CV_folds = 10, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
+
+params_ranger = list(probability = FALSE, 
+                     num.trees = 100, 
+                     verbose = TRUE, 
+                     classification = FALSE,
+                     mtry = 3,
+                     min.node.size = 10,
+                     num.threads = 2, 
+                     importance = 'permutation')
+
+
+params_features = list(keep_number_feat = NULL, 
+                       union = TRUE)
+
+feat = wrapper_feat_select(X, 
+                           y, 
+                           params_glmnet = params_glmnet, 
+                           params_xgboost = params_xgboost, 
+                           params_ranger = params_ranger,
+                            xgb_sort = NULL,
+                           CV_folds = 10, 
+                           stratified_regr = FALSE, 
+                           cores_glmnet = 2, 
+                           params_features = params_features)
 }
-
+}

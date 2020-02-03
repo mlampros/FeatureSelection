@@ -21,9 +21,12 @@ this function creates stratified folds in binary and multiclass classification
 }
 \examples{
 
-# data(iris)
-# y = as.factor(iris[, 5])
+\dontrun{
 
-# folds = class_folds(10, y, shuffle = TRUE)
+data(iris)
+
+y = as.factor(iris[, 5])
+
+folds = class_folds(10, y, shuffle = TRUE)
 }
-
+}

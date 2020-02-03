@@ -23,9 +23,13 @@ partition of data (train-test-split)
 }
 \examples{
 
-# data(iris)
-# y = X[, 1]
+\dontrun{
 
-# split = DataSplit(y, TrainRatio = 0.75, regression = FALSE, shuffle = FALSE)
+data(iris)
+
+y = X[, 1]
+
+split = DataSplit(y, TrainRatio = 0.75, regression = FALSE, shuffle = FALSE)
+
 }
-
+}

@@ -9,11 +9,15 @@
 #' @export
 #' @importFrom utils combn
 #' @examples
+#' 
+#' \dontrun{
+#' 
+#' data(iris)
+#' 
+#' y = as.factor(iris[, 5])
 #'
-#' # data(iris)
-#' # y = as.factor(iris[, 5])
-#'
-#' # folds = class_folds(10, y, shuffle = TRUE)
+#' folds = class_folds(10, y, shuffle = TRUE)
+#' }
 
 
 class_folds = function(folds, RESP, shuffle = FALSE) {
@@ -49,14 +53,13 @@ class_folds = function(folds, RESP, shuffle = FALSE) {
     spl = lapply(spl, function(x) func_shuffle(x))           # the indices of the unique levels will be shuffled
   }
 
-  ind = t(combn(1:folds, 2))
+  ind = t(utils::combn(1:folds, 2))
 
   ind1 = apply(ind, 1, function(x) length(intersect(spl[x[1]], spl[x[2]])))
 
   if (sum(ind1) > 0) {
 
     stop(simpleError("there is an intersection between the resulted indexes of the folds"))
-
   }
 
   if (length(unlist(spl)) != length(RESP)) {
@@ -80,13 +83,16 @@ class_folds = function(folds, RESP, shuffle = FALSE) {
 #' @return a list of indices
 #' @export
 #' @examples
+#' 
+#' \dontrun{
+#' 
+#' data(iris)
+#' 
+#' y = X[, 1]
 #'
-#' # data(iris)
-#' # y = X[, 1]
-#'
-#' # folds = regr_folds(5, y, stratified = FALSE)
-
-
+#' folds = regr_folds(5, y, stratified = FALSE)
+#' 
+#' }
 
 
 regr_folds = function(folds, RESP, stratified = FALSE) {
@@ -151,10 +157,15 @@ regr_folds = function(folds, RESP, stratified = FALSE) {
 #' @export
 #' @examples
 #'
-#' # data(iris)
-#' # y = X[, 1]
+#' \dontrun{
+#' 
+#' data(iris)
+#' 
+#' y = X[, 1]
 #'
-#' # split = DataSplit(y, TrainRatio = 0.75, regression = FALSE, shuffle = FALSE)
+#' split = DataSplit(y, TrainRatio = 0.75, regression = FALSE, shuffle = FALSE)
+#' 
+#' }
 
 
 DataSplit = function(y, TrainRatio = 0.75, regression = TRUE, shuffle = FALSE) {

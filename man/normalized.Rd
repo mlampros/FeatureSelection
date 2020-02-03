@@ -15,4 +15,3 @@ normalized data in form of a vector
 \description{
 this function normalizes the feature importance of the algorithms, so that data between algorithms is in the same scale
 }
-

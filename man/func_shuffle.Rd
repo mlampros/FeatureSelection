@@ -17,4 +17,3 @@ shuffled indices of a vector
 \description{
 this function shuffles the items of a vector
 }
-

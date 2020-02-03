@@ -16,7 +16,7 @@ second_func_cor = function(dat_frame) {
     temp_df = data.frame(dat_frame[, i], row.names = rownames(dat_frame))
     colnames(temp_df) = coln[i]
     temp_df[temp_df == 0.0] = NA
-    lst[[i]] = na.omit(temp_df)
+    lst[[i]] = stats::na.omit(temp_df)
   }
 
   return(lst)
@@ -58,20 +58,18 @@ remove_duplic_func = function(sublist) {
 #' @details
 #' This function takes a data frame or a matrix and returns the correlated variables of the data
 #' @export
-#' @importFrom stats as.formula coefficients cor median na.omit predict
+#' @importFrom stats cor na.omit
 
 
 func_correlation = function(data, target = NULL, correlation_thresh = NULL, use_obs = NULL, correlation_method = NULL) {
 
-  suppressMessages(library(dplyr))
-
-  if (!class(data) %in% c("data.frame", "matrix")) stop('the data should be either a data frame or a matrix')
+  if (!inherits(data, c("data.frame", "matrix"))) stop('the data should be either a data frame or a matrix')
   if (sum(unlist(lapply(1:dim(data)[2], function(x) is.factor(data[, x]) || is.character(data[, x]))) > 0)) stop(simpleError('data must be numeric'))
   if (is.null(correlation_method)) stop(simpleError('use one of "pearson", "kendall", "spearman" as correlation method'))
   if (is.null(use_obs)) stop(simpleError('use one of "everything", "all.obs", "complete.obs", "na.or.complete", "pairwise.complete.obs" as use_obs'))
   if (is.null(correlation_thresh) || correlation_thresh <= 0.0 || correlation_thresh >= 1.0) stop(simpleError('the correlation_thresh should be greater than 0.0 and less than 1.0'))
 
-  df = data.frame(cor(data, use = use_obs, method = correlation_method))
+  df = data.frame(stats::cor(data, use = use_obs, method = correlation_method))
 
   if (length(target) > 1) {                 # in case that target is a vector with multiple predictors, it returns a matrix with those predictors above the correlation_thresh
 
@@ -84,7 +82,7 @@ func_correlation = function(data, target = NULL, correlation_thresh = NULL, use_
       filt = data.frame(row.names = rownames(df), df[, which(!is.na(match(colnames(df), target)))])
       colnames(filt) = colnames(df)[which(!is.na(match(colnames(df), target)))]
       filt[filt == 0.0] = NA
-      filt = na.omit(filt)
+      filt = stats::na.omit(filt)
     }
 
     else {
@@ -105,7 +103,7 @@ func_correlation = function(data, target = NULL, correlation_thresh = NULL, use_
     df_names = data.frame(df[, target], row.names = rownames(df))            # in case where target is a single string, I get a single column data.frame out
     colnames(df_names) = target
     df_names[rownames(df_names) == target, ] = NA                            # remove the 'target' column-name
-    df_names = na.omit(df_names)
+    df_names = stats::na.omit(df_names)
     filt = subset(df_names, df_names[, target] >= correlation_thresh)
     filt = data.frame(features = rownames(filt), filt[, 1])
     filt = filt[order(filt[, 2], decreasing = TRUE), ]

@@ -303,7 +303,7 @@ testthat::test_that("it works in MULTICLASS classification. The labels should be
 
 testthat::test_that("it works in MULTICLASS classification. The labels should be in c(0 to Inf), so that xgboost works. It should return a
 
-                    list of two when union = T. The data frames in the first and in the second list should be non-empty. Case multiclass classification, sorted by Frequence in xgboost", {
+                    list of two when union = T. The data frames in the first and in the second list should be non-empty. Case multiclass classification, sorted by Frequency in xgboost", {
 
   y = iris[, 5]
   multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
@@ -318,7 +318,7 @@ testthat::test_that("it works in MULTICLASS classification. The labels should be
 
   params_features = list(keep_number_feat = NULL, union = T)
 
-  res = wrapper_feat_select(X, multiclass_xgboost, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = "Frequence",
+  res = wrapper_feat_select(X, multiclass_xgboost, params_glmnet = params_glmnet, params_xgboost = params_xgboost, params_ranger = params_ranger, xgb_sort = "Frequency",
 
                             CV_folds = 3, stratified_regr = FALSE, cores_glmnet = 2, params_features = params_features)
 

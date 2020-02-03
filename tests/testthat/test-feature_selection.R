@@ -68,15 +68,6 @@ testthat::test_that("missing values in data frame will be replaced with the medi
   y = X[, 1]
   X = X[, -1]
 
-  func_nas = function(X, col_idx) {                        # randomly adding NA's
-
-    idx = sample(1:length(X[, col_idx]), 30, replace = F)
-
-    X[idx, col_idx] = NA
-
-    return(X[, col_idx])
-  }
-
   X[, 1] = func_nas(X, 1)                    # add NA's to first and last column
   X[, ncol(X)] = func_nas(X, ncol(X))
 
@@ -94,15 +85,6 @@ testthat::test_that("missing values in data frame will be replaced with the medi
   X = iris[, -5]
   y = X[, 1]
   X = X[, -1]
-
-  func_nas = function(X, col_idx) {                        # randomly adding NA's
-
-    idx = sample(1:length(X[, col_idx]), 30, replace = F)
-
-    X[idx, col_idx] = NA
-
-    return(X[, col_idx])
-  }
 
   X[, 1] = func_nas(X, 1)                    # add NA's to first and last column
   X[, ncol(X)] = func_nas(X, ncol(X))
@@ -122,19 +104,10 @@ testthat::test_that("missing values in sparse Matrix will be replaced with the m
   y = X[, 1]
   X = X[, -1]
 
-  func_nas = function(X, col_idx) {                        # randomly adding NA's
-
-    idx = sample(1:length(X[, col_idx]), 30, replace = F)
-
-    X[idx, col_idx] = NA
-
-    return(X[, col_idx])
-  }
-
   X[, 1] = func_nas(X, 1)                    # add NA's to first and last column
   X[, ncol(X)] = func_nas(X, ncol(X))
 
-  X = Matrix(as.matrix(X), sparse = T)       # convert to sparse matrix
+  X = Matrix::Matrix(as.matrix(X), sparse = T)       # convert to sparse matrix
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
@@ -150,18 +123,9 @@ testthat::test_that("missing values in sparse Matrix will be replaced with the m
   y = X[, 1]
   X = X[, -1]
 
-  func_nas = function(X, col_idx) {                        # randomly adding NA's
-
-    idx = sample(1:length(X[, col_idx]), 30, replace = F)
-
-    X[idx, col_idx] = NA
-
-    return(X[, col_idx])
-  }
-
   X[, 1] = func_nas(X, 1)                    # add NA's to first and last column
   X[, ncol(X)] = func_nas(X, ncol(X))
-  X = Matrix(as.matrix(X), sparse = T)     # convert to sparse matrix
+  X = Matrix::Matrix(as.matrix(X), sparse = T)     # convert to sparse matrix
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
 
@@ -243,7 +207,7 @@ testthat::test_that("glmnet takes a sparse matrix and returns a data frame with 
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
   res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 1, cores_glmnet = NULL, verbose = T)
@@ -255,7 +219,7 @@ testthat::test_that("glmnet takes a sparse matrix and returns a data frame with 
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
   res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 3, cores_glmnet = NULL, verbose = T)
@@ -268,7 +232,7 @@ testthat::test_that("glmnet takes a sparse matrix and returns a data frame with 
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
   res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 1, cores_glmnet = NULL, scale_coefs_glmnet = T, verbose = T)
@@ -280,7 +244,7 @@ testthat::test_that("glmnet takes a sparse matrix and returns a data frame with 
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_glmnet = list(alpha = 1, family = 'gaussian', nfolds = 3, parallel = F)
   res = feature_selection(X, y, method = 'glmnet-lasso', params_glmnet = params_glmnet, CV_folds = 3, cores_glmnet = NULL, scale_coefs_glmnet = T, verbose = T)
@@ -376,7 +340,7 @@ testthat::test_that("xgboost returns an error if data not data.frame or matrix, 
 })
 
 
-testthat::test_that("xgboost returns a data frame with the important predictors, in case 1 folds, default xgb_sort = Frequence", {
+testthat::test_that("xgboost returns a data frame with the important predictors, in case 1 folds, default xgb_sort = Frequency", {
 
   y = iris[, 5]
   multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
@@ -426,7 +390,7 @@ testthat::test_that("xgboost using sparse Matrix returns a data frame with the i
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.35, "subsample" = 0.65, "max_depth" = 6, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -437,11 +401,11 @@ testthat::test_that("xgboost using sparse Matrix returns a data frame with the i
 })
 
 
-testthat::test_that("xgboost using sparse Matrix returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequence", {
+testthat::test_that("xgboost using sparse Matrix returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequency", {
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.35, "subsample" = 0.65, "max_depth" = 6, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -452,11 +416,11 @@ testthat::test_that("xgboost using sparse Matrix returns a data frame with the i
 })
 
 
-testthat::test_that("xgboost using sparse Matrix returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequence", {
+testthat::test_that("xgboost using sparse Matrix returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequency", {
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.35, "subsample" = 0.65, "max_depth" = 6, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -468,11 +432,11 @@ testthat::test_that("xgboost using sparse Matrix returns a data frame with the i
 
 
 
-testthat::test_that("xgboost using sparse Matrix returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequence", {
+testthat::test_that("xgboost using sparse Matrix returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequency", {
 
   X = iris[, -5]
   y = X[, 1]
-  X = Matrix(as.matrix(X[, -1]), sparse = T)
+  X = Matrix::Matrix(as.matrix(X[, -1]), sparse = T)
 
   params_xgboost = list( params = list("objective" = "reg:linear", "bst:eta" = 0.35, "subsample" = 0.65, "max_depth" = 6, "colsample_bytree" = 0.65, "nthread" = 2),
                          nrounds = 50, print.every.n = 50, verbose = 0, maximize = FALSE)
@@ -483,7 +447,7 @@ testthat::test_that("xgboost using sparse Matrix returns a data frame with the i
 })
 
 
-testthat::test_that("xgboost using data.frame in multiclass classification, returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequence", {
+testthat::test_that("xgboost using data.frame in multiclass classification, returns a data frame with the important predictors, in case 3 folds, default xgb_sort = Frequency", {
 
   y = iris[, 5]
   multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
@@ -498,7 +462,7 @@ testthat::test_that("xgboost using data.frame in multiclass classification, retu
 })
 
 
-testthat::test_that("xgboost using data.frame in binary classification, returns a data frame with the important predictors, in case 5 folds, default xgb_sort = Frequence", {
+testthat::test_that("xgboost using data.frame in binary classification, returns a data frame with the important predictors, in case 5 folds, default xgb_sort = Frequency", {
 
   y = iris[, 5]
   multiclass_xgboost = ifelse(y == 'setosa', 0, 1)
