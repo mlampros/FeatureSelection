@@ -14,12 +14,8 @@ before_install:                                                         # copy-p
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.8 90
 
 install:
-  - Rscript -e 'install.packages(c("devtools","roxygen2","testthat", "doMC", "dplyr", "glmnet", "ranger", "xgboost", "covr"))'
-
-r:
-  - oldrel
-  - release
-  - devel
+  - Rscript -e 'install.packages(c("devtools","roxygen2","testthat", "doMC", "dplyr", "glmnet", "ranger", "covr"))'
+  - Rscript -e 'devtools::install_version("xgboost", version = "0.4-4", repos = "http://cran.us.r-project.org")'       # install older version of xgboost
   
 after_success:
   - Rscript -e 'covr::codecov(quiet = FALSE)'

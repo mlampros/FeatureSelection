@@ -7,9 +7,25 @@
 
 #### Feature Selection in R using glmnet-lasso, xgboost and ranger
 <br>
-  This is a wrapper-package for glmnet-lasso, xgboost and ranger. It can be installed using the install_github('mlampros/FeatureSelection') of the devtools package. After downloading use ? to read info about each function (i.e. ?feature_selection). More details can be found in the [blog post](http://mlampros.github.io/2016/02/14/feature-selection/). 
+  This is a wrapper-package for glmnet-lasso, xgboost and ranger. After downloading use ? to read info about each function (i.e. ?feature_selection). More details can be found in the blog-post (http://mlampros.github.io/2016/02/14/feature-selection/) and to download the latest version from Github use the 'install_github' function of the devtools package,
+<br>
+
+```R
+
+devtools::install_github('mlampros/FeatureSelection')
+
+```
 
 <br>
 
 
 UPDATED : 18-05-2016 [ I added tests and code-coverage ]
+<br>
+
+UPDATE : 13-06-2017 [ One needs an older xgboost version (= 0.4-4) to install (and experiment with) the package ]
+
+```R
+
+devtools::install_version("xgboost", version = "0.4-4", repos = "http://cran.us.r-project.org")
+
+```
