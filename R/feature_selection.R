@@ -1,5 +1,7 @@
 
-utils::globalVariables(c("%>%", "."))
+utils::globalVariables(c("%>%", 
+                         ".",
+                         "predict"))         # Keep 'predict' as a global variable. It appears both in 'stats' and 'glmnet' however I can not specify 'predict.cv.glmnet' because the function does not appear in the >= 3.0.0 version of the package (I receive an error otherwise)
 
 
 #' Feature selection
@@ -178,7 +180,7 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
 
     cv = do.call(glmnet::cv.glmnet, params_glmnet)
     
-    pr = glmnet::predict.cv.glmnet(cv, type = 'coefficients', s = cv$lambda.min)
+    pr = predict(cv, type = 'coefficients', s = cv$lambda.min)
 
     if (is.factor(y)) {                    # in case of classification glmnet returns importance in form of a sparse matrix
 
@@ -305,7 +307,7 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
 
       cv = do.call(glmnet::cv.glmnet, params_glmnet)
 
-      pr = glmnet::predict.cv.glmnet(cv, type = 'coefficients', s = cv$lambda.min)
+      pr = predict(cv, type = 'coefficients', s = cv$lambda.min)
 
       if (is.factor(y)) {                                                  # in case of classification glmnet returns importance in form of a sparse matrix
 
