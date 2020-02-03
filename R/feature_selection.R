@@ -31,7 +31,7 @@ utils::globalVariables(c("%>%",
 #' and returns the important features using one of the 'impurity' or 'permutation' methods.
 #'
 #' @export
-#' @importFrom glmnet cv.glmnet predict.cv.glmnet
+#' @importFrom glmnet cv.glmnet
 #' @importFrom dplyr group_by summarize summarize_each funs n
 #' @importFrom doMC registerDoMC
 #' @importFrom xgboost xgb.DMatrix xgb.train xgb.importance
