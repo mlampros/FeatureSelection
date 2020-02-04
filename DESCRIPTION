@@ -2,7 +2,7 @@ Package: FeatureSelection
 Type: Package
 Title: Feature extraction and selection based on 'glmnet', 'xgboost' and 'ranger'
 Version: 1.0.0
-Date: 2020-02-03
+Date: 2020-02-04
 Author: Lampros Mouselimis
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/FeatureSelection/issues

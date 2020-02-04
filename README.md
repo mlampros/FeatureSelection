@@ -22,7 +22,11 @@ remotes::install_github('mlampros/FeatureSelection')
 
 <br>
 
-Currently there is a new version of *glmnet* (3.0.0) with new functionality (*relax*,  *trace*,  *assess*, *bigGlm*), however it requires an R version of 3.6.0 (see the [new vignette](https://cran.r-project.org/web/packages/glmnet/vignettes/relax.pdf)  for more information).
+**Package Updates**:
+
+* Currently there is a new version of *glmnet* (3.0.0) with new functionality (*relax*,  *trace*,  *assess*, *bigGlm*), however it requires an R version of 3.6.0 (see the [new vignette](https://cran.r-project.org/web/packages/glmnet/vignettes/relax.pdf)  for more information).
+* In the *ranger* R package the *ranger::importance_pvalues()* was added
+* Currently, the recommended approach for future selection is [SHAP](https://github.com/slundberg/shap)
 
 <br>
 

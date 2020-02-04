@@ -4,7 +4,7 @@
 \alias{DataSplit}
 \title{partition of data (train-test-split)}
 \usage{
-DataSplit(y, TrainRatio = 0.75, regression = TRUE, shuffle = FALSE)
+DataSplit(y, TrainRatio = 0.75, regression = TRUE, shuffle = FALSE, seed = 1)
 }
 \arguments{
 \item{y}{is a numeric vector (response variable)}
@@ -14,6 +14,8 @@ DataSplit(y, TrainRatio = 0.75, regression = TRUE, shuffle = FALSE)
 \item{regression}{is a boolean (TRUE, FALSE) indicating if it's a regression or classification task}
 
 \item{shuffle}{is a boolean (TRUE, FALSE) indicating if the data should be shuffled or not (by default 5 times)}
+
+\item{seed}{an integer specifying the random seed}
 }
 \value{
 a list of indices (train-test)

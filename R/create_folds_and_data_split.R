@@ -153,6 +153,7 @@ regr_folds = function(folds, RESP, stratified = FALSE) {
 #' @param TrainRatio is the percentage of train-data after the partition
 #' @param regression is a boolean (TRUE, FALSE) indicating if it's a regression or classification task
 #' @param shuffle is a boolean (TRUE, FALSE) indicating if the data should be shuffled or not (by default 5 times)
+#' @param seed an integer specifying the random seed
 #' @return a list of indices (train-test)
 #' @export
 #' @examples
@@ -168,19 +169,20 @@ regr_folds = function(folds, RESP, stratified = FALSE) {
 #' }
 
 
-DataSplit = function(y, TrainRatio = 0.75, regression = TRUE, shuffle = FALSE) {
+DataSplit = function(y, TrainRatio = 0.75, regression = TRUE, shuffle = FALSE, seed = 1) {
 
   if (TrainRatio >= 1.0 || TrainRatio <= 0.0) stop('TrainRation should be a float number greater than 0 and less than 1.0')
 
   if (regression) {
-    idx_train = sample(1:length(y), size = TrainRatio * length(y))
+    set.seed(seed)
+    idx_train = sample(1:length(y), size = round(TrainRatio * length(y)))
     idx_test = setdiff(1:length(y), idx_train)
   }
 
   if (!regression) {
     clas = lapply(unique(y), function(x) which(y == x))
-    idx_train = unlist(lapply(clas, function(x) sample(x,
-                                                       size = TrainRatio * length(x))))
+    set.seed(seed)
+    idx_train = unlist(lapply(clas, function(x) sample(x, size = round(TrainRatio * length(x)))))
     idx_test = setdiff(1:length(y), idx_train)
   }
 
