@@ -3,18 +3,18 @@
 #' secondary function to replace NAs
 #'
 #' @keywords internal
-#' 
+#'
 #' @importFrom stats median
 
 func_replace_NAs = function(data, which_isna) {
-  
+
   for (i in which_isna) {
-    
+
     tmp_median = stats::median(data[, i], na.rm = T)
-    
+
     data[which(is.na(data[, i])), i] = tmp_median
   }
-  
+
   return(data)
 }
 
@@ -51,7 +51,7 @@ func_shuffle = function(vec, times = 10) {
 
 add_probs_dfs = function(PREDS_LST) {
 
-  if (class(PREDS_LST) != "list") stop("PREDS_LST must be a list")
+  if (!inherits(PREDS_LST, "list")) stop("PREDS_LST must be a list")
 
   r = all(unlist(lapply(PREDS_LST, nrow)) == unlist(lapply(PREDS_LST, nrow))[1])
   c = all(unlist(lapply(PREDS_LST, ncol)) == unlist(lapply(PREDS_LST, ncol))[1])
