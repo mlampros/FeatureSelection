@@ -2,8 +2,8 @@ Package: FeatureSelection
 Type: Package
 Title: Feature extraction and selection based on 'glmnet', 'xgboost' and 'ranger'
 Version: 1.0.0
-Date: 2020-02-04
-Author: Lampros Mouselimis
+Date: 2021-05-19
+Authors@R: c( person(given = "Lampros", family = "Mouselimis", email = "mouselimislampros@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "https://orcid.org/0000-0002-8024-1546")))
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/FeatureSelection/issues
 URL: https://github.com/mlampros/FeatureSelection
@@ -11,7 +11,7 @@ Description: Feature extraction and selection based on 'glmnet', 'xgboost' and '
 Depends:
     R(>= 3.3.0)
 Imports:
-    doMC,
+    doParallel,
     dplyr,
     glmnet,
     ranger,

@@ -1,5 +1,5 @@
 
-utils::globalVariables(c("%>%", 
+utils::globalVariables(c("%>%",
                          ".",
                          "predict"))         # Keep 'predict' as a global variable. It appears both in 'stats' and 'glmnet' however I can not specify 'predict.cv.glmnet' because the function does not appear in the >= 3.0.0 version of the package (I receive an error otherwise)
 
@@ -22,9 +22,9 @@ utils::globalVariables(c("%>%",
 #' @param verbose outputs info
 #' @return a data frame with the most important features
 #' @author Lampros Mouselimis
-#' 
+#'
 #' @details
-#' 
+#'
 #' This function returns the important features using one of the glmnet, xgboost or ranger algorithms. The glmnet algorithm can take either a sparse matrix, a matrix or a data frame
 #' and returns a data frame with non zero coefficients. The xgboost algorithm can take either a sparse matrix, a matrix or a data frame and returns the importance of the features in form
 #' of a data frame, furthermore it is possible to sort the features using one of the "Gain", "Cover" or "Frequency" methods. The ranger algorithm can take either a matrix or a data frame
@@ -33,14 +33,14 @@ utils::globalVariables(c("%>%",
 #' @export
 #' @importFrom glmnet cv.glmnet
 #' @importFrom dplyr group_by summarize summarize_each funs n
-#' @importFrom doMC registerDoMC
+#' @importFrom doParallel registerDoParallel
 #' @importFrom xgboost xgb.DMatrix xgb.train xgb.importance
 #' @importFrom ranger ranger
 #' @importFrom stats as.formula
 #' @importFrom Matrix colSums Matrix
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-#' 
+#'
 #' @examples
 #'
 #' \dontrun{
@@ -50,20 +50,20 @@ utils::globalVariables(c("%>%",
 #' #...........
 #'
 #' data(iris)
-#' 
+#'
 #' X = iris[, -5]
 #' y = X[, 1]
 #' X = X[, -1]
 #'
-#' params_glmnet = list(alpha = 1, 
-#'                      family = 'gaussian', 
-#'                      nfolds = 3, 
+#' params_glmnet = list(alpha = 1,
+#'                      family = 'gaussian',
+#'                      nfolds = 3,
 #'                      parallel = TRUE)
-#'                      
-#' res = feature_selection(X, 
+#'
+#' res = feature_selection(X,
 #'                         y,
 #'                         method = 'glmnet-lasso',
-#'                         params_glmnet = params_glmnet, 
+#'                         params_glmnet = params_glmnet,
 #'                         CV_folds = 5,
 #'                         cores_glmnet = 5)
 #'
@@ -76,46 +76,46 @@ utils::globalVariables(c("%>%",
 #' y[y == 'setosa'] = 'virginica'
 #' X = iris[, -5]
 #'
-#' params_ranger = list(write.forest = TRUE, 
-#'                      probability = TRUE, 
-#'                      num.threads = 6, 
-#'                      num.trees = 50, 
-#'                      verbose = FALSE, 
+#' params_ranger = list(write.forest = TRUE,
+#'                      probability = TRUE,
+#'                      num.threads = 6,
+#'                      num.trees = 50,
+#'                      verbose = FALSE,
 #'                      classification = TRUE,
-#'                      mtry = 2, 
-#'                      min.node.size = 5, 
+#'                      mtry = 2,
+#'                      min.node.size = 5,
 #'                      importance = 'impurity')
 #'
-#' res = feature_selection(X, 
-#'                         y, 
-#'                         method = 'ranger', 
+#' res = feature_selection(X,
+#'                         y,
+#'                         method = 'ranger',
 #'                         params_ranger = params_ranger,
 #'                          CV_folds = 5)
 #'
 #' #..........................
 #' # multiclass classification
 #' #..........................
-#' 
+#'
 #' y = iris[, 5]
 #' multiclass_xgboost = ifelse(y == 'setosa', 0, ifelse(y == 'virginica', 1, 2))
 #' X = iris[, -5]
 #'
-#' params_xgboost = list(params = list("objective" = "multi:softprob", 
-#'                                     "bst:eta" = 0.35, 
+#' params_xgboost = list(params = list("objective" = "multi:softprob",
+#'                                     "bst:eta" = 0.35,
 #'                                     "subsample" = 0.65,
-#'                                      "num_class" = 3, 
-#'                                      "max_depth" = 6, 
-#'                                      "colsample_bytree" = 0.65, 
+#'                                      "num_class" = 3,
+#'                                      "max_depth" = 6,
+#'                                      "colsample_bytree" = 0.65,
 #'                                      "nthread" = 2),
 #'                         nrounds = 50,
-#'                          print.every.n = 50, 
-#'                          verbose = 0, 
+#'                          print.every.n = 50,
+#'                          verbose = 0,
 #'                          maximize = FALSE)
 #'
-#' res = feature_selection(X, 
-#'                         multiclass_xgboost, 
-#'                         method = 'xgboost', 
-#'                         params_xgboost = params_xgboost, 
+#' res = feature_selection(X,
+#'                         multiclass_xgboost,
+#'                         method = 'xgboost',
+#'                         params_xgboost = params_xgboost,
 #'                         CV_folds = 5)
 #' }
 
@@ -136,75 +136,75 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
     }
 
     if (params_glmnet$family == 'binomial' || params_glmnet$family == 'multinomial') {
-      
+
       y = as.factor(y)
     }
 
     isna = as.vector(Matrix::colSums(is.na(X)))                                                                                # replace the NA-values of each column with the median
-    
+
     if (sum(isna) > 0) {
-      
+
       if (verbose) {
         cat('\n')
         cat('Missing values present in glmnet-lasso. They will be replaced with the median.', '\n')
         cat('\n')
       }
-      
+
       X = func_replace_NAs(X, which(isna > 0))
     }
 
     Feature = colnames(X)
-    
+
     if (is.data.frame(X)) {
-      
+
       X <- as.matrix(X)
     }
-    
+
     else if (is.matrix(X) || (inherits(X, 'dgCMatrix'))) {
-      
+
       X = X
     }
 
     else {
-      
+
       stop(simpleError("X must be either a data.frame or a (sparse-) matrix"))
     }
 
     # scale the explanatory variables as explained here : http://stats.stackexchange.com/questions/14853/variable-importance-from-glmnet
     # [ exclude from scaling those predictors that have less than 2 unique values, OTHERWISE error ]
     if (scale_coefs_glmnet) X[, -which(as.vector(apply(X, 2, function(x) length(unique(x)))) < 2)] = scale(X[, -which(as.vector(apply(X, 2, function(x) length(unique(x)))) < 2)])
-    
+
     params_glmnet[['x']] = X
     params_glmnet[['y']] = y
     if (scale_coefs_glmnet) params_glmnet[['standardize']] = FALSE    # after using scale() ensure that the variables won't be standardized prior to fitting the model
 
     cv = do.call(glmnet::cv.glmnet, params_glmnet)
-    
+
     pr = predict(cv, type = 'coefficients', s = cv$lambda.min)
 
     if (is.factor(y)) {                    # in case of classification glmnet returns importance in form of a sparse matrix
 
       if (length(unique(y)) == 2) {        # in case of binary-classification it returns a single column
-        
+
         df1 = as.matrix(pr)[-1, ]
         df1 = data.frame(features = names(df1), importance = as.vector(df1))
-        
+
         if (scale_coefs_glmnet) {
           df1[, 2] = abs(df1[, 2])
           df1 = df1[order(df1[, 2], decreasing = TRUE), ]
         }
       }
-      
+
       if (length(unique(y)) > 2) {                                                                   # in case of multiclass classification it returns a sparse matrix for each class separately
-        
+
         df1 = do.call(rbind, lapply(pr, function(x) as.matrix(x)[-1, ]))
         df1 = colMeans(df1)
-        
+
         if (any(df1 == 0.0)) {
-          
+
           df1 = df1[-which(df1 == 0L)]                                                               # remove zero-coefficient predictors
         }
-        
+
         df1 = data.frame(features = names(df1), importance = as.vector(df1))
         if (scale_coefs_glmnet) {
           df1[, 2] = abs(df1[, 2])                                                                   # after scaling, I take the absolute value in order to plot the important features [ this because many of them have high negative values -- meaning high impact on the response ]
@@ -230,7 +230,15 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
   else if (method == 'glmnet-lasso' && CV_folds > 1) {
 
     if (params_glmnet$parallel && !is.null(cores_glmnet)) {
-      doMC::registerDoMC(cores = cores_glmnet)
+
+      if (.Platform$OS.type == "unix") {
+        doParallel::registerDoParallel(cores = cores_glmnet)
+      }
+
+      if (.Platform$OS.type == "windows") {
+        cl = parallel::makePSOCKcluster(cores_glmnet)
+        doParallel::registerDoParallel(cl = cl)            # compared to unix, ".. if not specified, on Windows a three worker cluster is created and used .." [ see also: https://stackoverflow.com/a/45122448/8302386 ]
+      }
     }
 
     if (verbose) {
@@ -315,7 +323,7 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
 
           get_all_feat[[i]] = as.matrix(pr)[-1, ]
         }
-        
+
         if (length(unique(y)) > 2) {                                       # in case of multiclass classification it returns a sparse matrix for each class separately
 
           get_all_feat[[i]] = do.call(rbind, lapply(pr, function(x) as.matrix(x)[-1, ]))
@@ -347,7 +355,7 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
           tbl_x = tbl_x[order(tbl_x[, 2], decreasing = TRUE), ]
         }
       }
-      
+
       if (length(unique(y)) > 2) {
 
         df1 = data.frame(add_probs_dfs(get_all_feat), row.names = rownames(get_all_feat[[1]]))
@@ -370,9 +378,16 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
 
       all_feat = data.frame(do.call('rbind', get_all_feat))
 
-      tbl_x = data.frame(all_feat %>% dplyr::group_by(.data$Feature) %>% dplyr::summarize(coefficients = mean(.data$coefficients, na.rm = TRUE), Frequency = dplyr::n()))       # for ".data" see: https://community.rstudio.com/t/how-to-solve-no-visible-binding-for-global-variable-note/28887/3 
+      tbl_x = data.frame(all_feat %>% dplyr::group_by(.data$Feature) %>% dplyr::summarize(coefficients = mean(.data$coefficients, na.rm = TRUE), Frequency = dplyr::n()))       # for ".data" see: https://community.rstudio.com/t/how-to-solve-no-visible-binding-for-global-variable-note/28887/3
       if (scale_coefs_glmnet) tbl_x[, 2] = abs(tbl_x[, 2])
       tbl_x = tbl_x[order(tbl_x$Frequency, tbl_x$coefficients, decreasing = TRUE),]          # the data.frame in 'glmnet-lasso' is sorted by Frequency (default)
+    }
+
+    if (params_glmnet$parallel && !is.null(cores_glmnet)) {
+
+      if (.Platform$OS.type == "windows") {
+        parallel::stopCluster(cl = cl)
+      }
     }
 
     return(tbl_x)
@@ -412,7 +427,7 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
 
       tbl1 = tbl1[order(tbl1$Frequency, decreasing = TRUE),]
     }
-    
+
     else if (xgb_sort == 'Gain') {
 
       tbl1 = tbl1[order(tbl1$Gain, decreasing = TRUE),]
@@ -528,14 +543,14 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
       form = stats::as.formula(paste0(paste0('y ~ '), paste(colnames(X), collapse = '+')))
 
       params_ranger[['formula']] = form
-      
+
       #dat = data.frame(y = y, X)}
     }
-    
+
     dat = cbind(y = y, X)                    # include y in the data so that it works with or without the 'dependent.variable.name'
 
     # else {
-    # 
+    #
     #   dat = X
     # }
 
@@ -598,14 +613,14 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
         form = stats::as.formula(paste0(paste0('y ~ '), paste(colnames(X_folds), collapse = '+')))
 
         params_ranger[['formula']] = form
-        
+
         #dat = data.frame(y = y_folds, X_folds)}
       }
-      
+
       dat = cbind(y = y_folds, X_folds)                  # include y in the data so that it works with or without the 'dependent.variable.name'
- 
+
       # else {
-      # 
+      #
       #   dat = X_folds
       # }
 

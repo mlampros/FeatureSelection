@@ -7,3 +7,4 @@
   + Adjusted the tests
   + Added Dockerfile and docker image
   + Updated the README.md and .travis.yml files
+* **19-05-2021**: I replaced **doMC** with **doParallel** because **doMC** does not work on both **Unix** and **Windows** OS (applies only to **'glmnet-lasso'** method if number of threads > 1)
