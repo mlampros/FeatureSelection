@@ -1,6 +1,9 @@
 
 utils::globalVariables(c("%>%",
                          ".",
+                         ".N",
+                         ".SD",
+                         "coefficients",
                          "predict"))         # Keep 'predict' as a global variable. It appears both in 'stats' and 'glmnet' however I can not specify 'predict.cv.glmnet' because the function does not appear in the >= 3.0.0 version of the package (I receive an error otherwise)
 
 
@@ -32,7 +35,7 @@ utils::globalVariables(c("%>%",
 #'
 #' @export
 #' @importFrom glmnet cv.glmnet
-#' @importFrom dplyr group_by summarize summarize_each funs n
+#' @importFrom data.table as.data.table
 #' @importFrom doParallel registerDoParallel
 #' @importFrom xgboost xgb.DMatrix xgb.train xgb.importance
 #' @importFrom ranger ranger
@@ -120,9 +123,18 @@ utils::globalVariables(c("%>%",
 #' }
 
 
-feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_xgboost = NULL, params_ranger = NULL, xgb_sort = NULL, CV_folds = 5, stratified_regr = FALSE,
-
-                             scale_coefs_glmnet = FALSE, cores_glmnet = NULL, verbose = FALSE) {
+feature_selection = function(X, 
+                             y,
+                             method = NULL, 
+                             params_glmnet = NULL, 
+                             params_xgboost = NULL, 
+                             params_ranger = NULL,
+                             xgb_sort = NULL,
+                             CV_folds = 5, 
+                             stratified_regr = FALSE,
+                             scale_coefs_glmnet = FALSE, 
+                             cores_glmnet = NULL,
+                             verbose = FALSE) {
 
   if (is.null(method)) stop("use method = .. to select one of the available methods : xgboost, glmnet-lasso, ranger")
   if (CV_folds < 1) stop("CV_folds should be >= 1")
@@ -376,9 +388,14 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
 
     else {
 
-      all_feat = data.frame(do.call('rbind', get_all_feat))
-
-      tbl_x = data.frame(all_feat %>% dplyr::group_by(.data$Feature) %>% dplyr::summarize(coefficients = mean(.data$coefficients, na.rm = TRUE), Frequency = dplyr::n()))       # for ".data" see: https://community.rstudio.com/t/how-to-solve-no-visible-binding-for-global-variable-note/28887/3
+      all_feat = data.frame(do.call('rbind', get_all_feat)) |>
+        data.table::as.data.table()
+      
+      tbl_x = all_feat[, .(coefficients = mean(coefficients, na.rm = TRUE),
+                           Frequency = .N),
+                       by = 'Feature'] |>
+        as.data.frame()
+      
       if (scale_coefs_glmnet) tbl_x[, 2] = abs(tbl_x[, 2])
       tbl_x = tbl_x[order(tbl_x$Frequency, tbl_x$coefficients, decreasing = TRUE),]          # the data.frame in 'glmnet-lasso' is sorted by Frequency (default)
     }
@@ -498,9 +515,11 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
       gc()
     }
 
-    tbl_x = data.frame(do.call('rbind', get_all_feat))
+    tbl_x = data.frame(do.call('rbind', get_all_feat)) |>
+      data.table::as.data.table()
 
-    tbl1 = data.frame(tbl_x %>% dplyr::group_by(.data$Feature) %>% dplyr::summarize_each(dplyr::funs(mean(., na.rm = TRUE))))       # for ".data" see: https://community.rstudio.com/t/how-to-solve-no-visible-binding-for-global-variable-note/28887/3
+    tbl1 = tbl_x[, lapply(.SD, mean, na.rm = TRUE), by = 'Feature'] |>
+      as.data.frame()
 
     if (is.null(xgb_sort) || (xgb_sort == 'Frequency')) {
 
@@ -636,9 +655,11 @@ feature_selection = function(X, y, method = NULL, params_glmnet = NULL, params_x
       gc()
     }
 
-    tbl_x = data.frame(do.call('rbind', get_all_feat))
-
-    tbl1 = data.frame(tbl_x %>% dplyr::group_by(.data$Feature) %>% dplyr::summarize_each(dplyr::funs(mean(., na.rm = TRUE))))       # for ".data" see: https://community.rstudio.com/t/how-to-solve-no-visible-binding-for-global-variable-note/28887/3
+    tbl_x = data.frame(do.call('rbind', get_all_feat)) |>
+      data.table::as.data.table()
+    
+    tbl1 = tbl_x[, lapply(.SD, mean, na.rm = TRUE), by = 'Feature'] |>
+      as.data.frame()
 
     tbl1 = tbl1[order(tbl1[, 2], decreasing = TRUE), ]
 

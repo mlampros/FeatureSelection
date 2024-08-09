@@ -2,7 +2,7 @@ Package: FeatureSelection
 Type: Package
 Title: Feature extraction and selection based on 'glmnet', 'xgboost' and 'ranger'
 Version: 1.0.0
-Date: 2021-05-19
+Date: 2024-08-09
 Authors@R: c( person(given = "Lampros", family = "Mouselimis", email = "mouselimislampros@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "https://orcid.org/0000-0002-8024-1546")))
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/FeatureSelection/issues
@@ -12,7 +12,7 @@ Depends:
     R(>= 3.3.0)
 Imports:
     doParallel,
-    dplyr,
+    data.table,
     glmnet,
     ranger,
     xgboost,
@@ -28,6 +28,5 @@ Suggests:
     covr
 SystemRequirements: update: apt-get -y update (deb)
 License: GPL-3
-LazyData: TRUE
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.0

@@ -22,7 +22,7 @@
 #' Furthermore the user can limit the number of features using the keep_number_feat parameter of the params_feature list.
 #' 
 #' @export
-#' @importFrom dplyr group_by summarize n 
+#' @importFrom data.table as.data.table
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' 
@@ -183,9 +183,13 @@ wrapper_feat_select = function(X, y, params_glmnet = NULL, params_xgboost = NULL
 
     modify_lst = lapply(out_union, function(x) data.frame(feature = x$features, rank = normalized(length(x$features):1)))
 
-    modify_lst1 = data.frame(do.call(rbind, modify_lst))
+    modify_lst1 = data.frame(do.call(rbind, modify_lst)) |>
+      data.table::as.data.table()
     
-    tbl_x = data.frame(modify_lst1 %>% dplyr::group_by(.data$feature) %>% dplyr::summarize(importance = sum(rank, na.rm = TRUE), Frequency = dplyr::n()))
+    tbl_x = modify_lst1[, .(importance = sum(rank, na.rm = TRUE),
+                            Frequency = .N),
+                        by = 'feature'] |>
+      as.data.frame()
 
     tbl1 = tbl_x[order(tbl_x$importance, decreasing = TRUE), ]
 
